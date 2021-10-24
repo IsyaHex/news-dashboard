@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <title>Edit News</title>
+    <div th:replace="_fragments/header :: header-css"></div>
+
+</head>
+<body>
+
+<div th:replace="_fragments/header :: header"></div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col mb-12">
+            <h1>News Management System</h1>
+            <hr>
+            <h2>Edit News</h2>
+            <form action="#" th:action="@{/news/details}" th:object="${news}" method="get">
+                <div class="col-sm-12">
+                    <input type="hidden" th:field="*{id}"/>
+                    <div class="input-group mb-3">
+                        <label for="editDescription" class="sr-only" id="editDescription">Description</label>
+                        <textarea class="form-control" id="textarea" th:field="*{description}"
+                                  onfocus="this.value=''" maxlength="500" rows="10" readonly></textarea>
+                    </div>
+                </div>
+            </form>
+            <hr>
+            <a th:action="@{/news}" class="font-weight-bold btn btn-outline-primary">Go Back</a>
+        </div>
+    </div>
+</div>
+<div th:replace="_fragments/footer :: footer"></div>
+
+</body>
+</html>

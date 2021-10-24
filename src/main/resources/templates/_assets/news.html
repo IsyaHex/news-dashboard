@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <title>News</title>
+    <div th:replace="_fragments/header :: header-css"></div>
+</head>
+<body>
+
+<div th:replace="_fragments/header :: header"></div>
+
+<div class="container-fluid" th:fragment="content">
+
+    <div class="modal fade" id="addNewsModal" tabindex="-1" role="dialog" aria-labelledby="addNewsModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewsModalLabel">Add new article</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" th:action="@{/news/saveNews}" th:object="${news}" method="post" id="addNewsModalForm">
+                        <input type="hidden" id="inputAddId" th:field="*{id}">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <div class="input-group mb-3">
+                                    <label for="addDescription" class="sr-only" id="addDescription">Description</label>
+                                    <textarea class="form-control" id="textarea" th:field="*{description}"
+                                              placeholder="Article description" onfocus="this.value=''" maxlength="500" rows="10"></textarea>
+                                </div>
+                                <div id="count">
+                                    <span id="current_count">0</span>
+                                    <span id="maximum_count">/ 500</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary" id="btnSubmit" name="addBook">Сохранить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:switch="${articles}">
+        <div class="col mb-12">
+            <h2 th:case="null">No news yet!</h2>
+            <div th:case="*">
+                <h2>News</h2>
+                <div class="form-group row" sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
+                    <div class="col-sm-3">
+                        <button id="addNews" class="font-weight-bold btn btn-primary" type="button">
+                            <i class="fa fa-book-open"></i> Добавить новость</button>
+                    </div>
+                </div>
+                <table id="news" class="table row-border table-responsive nowrap dt-colored-white-bg" style="width: 100%">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Описание новости</th>
+<!--                    <th sec:authorize="hasRole('ROLE_ADMIN')">Логин автора</th>-->
+                    <th>Логин автора</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Почта автора</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Дата создания</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Дата одобрения</th>
+                    <th style="align-content: center">Действия</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="article : ${articles}">
+                    <td th:text="${article.id}"></td>
+                    <td th:text="${article.description}"></td>
+<!--                    <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.user.username}"></td>-->
+                    <td th:text="${article.user.username}"></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.user.email}"></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.createDate}"></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.acceptDate}"></td>
+                    <td><a th:href="@{/news/edit/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-primary">Edit</a>
+                        <a th:href="@{/news/details/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-info">Details</a>
+                    </td>
+<!--                    <td><button id="editNewsButton" class="font-weight-bold btn btn-warning" type="button"><i class="fa fa-book-open"></i> Edit</button></td>-->
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/news/approve/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-success">Approve</a>
+                        <a th:href="@{/news/reject/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-danger">Reject</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+    </div>
+</div>
+</div>
+<div th:replace="_fragments/footer :: footer"></div>
+
+<div th:fragment="scripts">
+    <script>
+
+        $('textarea').keyup(function() {
+            var characterCount = $(this).val().length,
+               current_count = $('#current_count'),
+               maximum_count = $('#maximum_count'),
+               count = $('#count');
+           current_count.text(characterCount);
+        });
+
+    $(document).ready(function () {
+
+        $('#addNews').click(function () {
+            $('#addNewsModal').modal('show');
+        });
+
+    });
+    </script>
+</div>
+</body>
+</html>

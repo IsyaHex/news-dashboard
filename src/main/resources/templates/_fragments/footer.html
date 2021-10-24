@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:fragment="footer">
+    <div class="container">
+        <footer>
+            <!-- this is footer -->
+            <script th:src="@{/webjars/jquery/jquery.js}"></script>
+            <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+            <script th:src="@{/webjars/bootstrap/js/bootstrap.js}"></script>
+
+
+            <script th:src="@{/assets/datatable/DataTables-1.10.24/js/jquery.dataTables.min.js}"></script>
+            <script th:src="@{/assets/datatable/DataTables-1.10.24/js/dataTables.bootstrap4.js}"></script>
+            <script th:src="@{/js/moment.min.js}"></script>
+            <script th:src="@{/assets/datatable/DateTime-1.0.3/js/dataTables.dateTime.js}"></script>
+
+            <!--<script th:src="@{assets/datatable/Responsive-2.2.7/js/dataTables.responsive.js}"></script>
+            <script th:src="@{assets/datatable/Responsive-2.2.7/js/responsive.bootstrap4.js}"></script>-->
+            <!--Search Pane-->
+            <!--<script th:src="@{assets/datatable/SearchPanes-1.2.2/js/dataTables.searchPanes.js}"></script>
+            <script th:src="@{assets/datatable/SearchPanes-1.2.2/js/searchPanes.bootstrap4.js}"></script>
+            <script th:src="@{assets/datatable/Select-1.3.3/js/dataTables.select.js}"></script>-->
+
+            <!--Search Builder-->
+            <!--<script th:src="@{assets/datatable/SearchBuilder-1.0.1/js/dataTables.searchBuilder.js}"></script>
+            <script th:src="@{assets/datatable/SearchBuilder-1.0.1/js/searchBuilder.bootstrap4.min.js}"></script>
+            <script th:src="@{assets/datatable/DateTime-1.0.3/js/dataTables.dateTime.js}"></script>
+-->
+            <!--Buttons-->
+            <script th:src="@{/assets/datatable/Buttons-1.7.0/js/dataTables.buttons.js}"></script>
+            <script th:src="@{/assets/datatable/Buttons-1.7.0/js/buttons.bootstrap4.js}"></script>
+            <script th:src="@{/assets/datatable/JSZip-2.5.0/jszip.js}"></script>
+            <script th:src="@{/assets/datatable/Buttons-1.7.0/js/buttons.html5.js}"></script>
+            <script th:src="@{/js/custom.js}"></script>
+        </footer>
+    </div>
+</div>
+</body>
+</html>

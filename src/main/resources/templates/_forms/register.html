@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Registration</title>
+    <div th:replace="_fragments/header :: header-css"></div>
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="login-form">
+    <form th:action="@{register/newUser}" th:object="${user}" method="post">
+        <h2 class="text-center">Регистрация</h2>
+
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+        </div>
+        <input type="hidden" id="id" th:field="*{id}">
+        <div class="form-group">
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" id="username" name="username"
+                   class="form-control" placeholder="Username" th:field="*{username}"
+                   onfocus="this.value=''" required>
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+        <div class="form-group">
+            <label for="email" class="sr-only">Email</label>
+            <input type="email" id="email" name="email" class="form-control"
+                   placeholder="Email" th:field="*{email}"
+                   onfocus="this.value=''" required>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </div>
+        <div class="form-group">
+            <label for="age" class="sr-only">Age</label>
+            <input type="number" id="age" name="age" class="form-control"
+                   placeholder="Age" step="1" th:field="*{age}"
+                   onfocus="this.value=''" maxlength="2" required>
+            <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" name="password" class="form-control"
+                   placeholder="Password" th:field="*{password}"
+                   onfocus="this.value=''" required>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </div>
+    </form>
+    <a th:action="@{/login}" class="font-weight-bold btn btn-outline-primary">Go Back</a>
+</div>
+</body>
+</html>

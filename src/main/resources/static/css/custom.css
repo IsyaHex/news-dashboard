@@ -1,0 +1,17 @@
+.dt-colored-white-bg {
+    background-color: #FFFFFF;
+}
+
+.dt-colored-white-bg tr {
+    height: 56px;
+    font-family: monospace;
+}
+
+.dt-colored-white-bg th {
+    padding: 32px;
+    font-family: "Helvetica Neue";
+}
+
+.dt-colored-white-bg td {
+    padding: 32px;
+}

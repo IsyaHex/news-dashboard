@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Configuration</title>
+
+    <div th:fragment="header-css">
+
+        <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+        <link th:rel="stylesheet" th:href="@{assets/datatable/DataTables-1.10.24/css/dataTables.bootstrap4.css}"/>
+
+        <!--Search Pane-->
+        <!--<link th:rel="stylesheet" th:href="@{assets/datatable/SearchPanes-1.2.2/css/searchPanes.bootstrap4.css}"/>-->
+
+        <!--Search Builder-->
+        <!--<link th:rel="stylesheet" th:href="@{assets/datatable/SearchBuilder-1.0.1/css/searchBuilder.bootstrap4.min.css}"/>-->
+        <!--<link th:rel="stylesheet" th:href="@{assets/datatable/SearchBuilder-1.0.1/css/searchBuilder.dataTables.css}"/>-->
+        <link th:rel="stylesheet" th:href="@{assets/datatable/DateTime-1.0.3/css/dataTables.dateTime.css}"/>
+
+        <!--<link th:rel="stylesheet" th:href="@{assets/datatable/Responsive-2.2.7/css/responsive.bootstrap4.css}"/>-->
+
+        <!--Buttons-->
+        <link th:rel="stylesheet" th:href="@{assets/datatable/Buttons-1.7.0/css/buttons.bootstrap4.css}"/>
+
+        <link th:rel="stylesheet" th:href="@{css/all.css} "/>
+        <link th:rel="stylesheet" th:href="@{css/header.css}"/>
+        <link th:rel="stylesheet" th:href="@{css/custom.css}"/>
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-xl navbar-dark" style="background-color:#001f3f!important">
+        <!-- Collection of nav links, forms, and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+            <div class="navbar-nav">
+                <a href="/" class="nav-item nav-link active font-weight-bold">Главная</a>
+            </div>
+
+            <div class="navbar-nav ml-auto" style="margin-right: 50px">
+                <div class="nav-item dropdown active font-weight-bold">
+                    <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
+                        <i class="fa fa-user"></i>
+                        <span th:text="${#authentication.getPrincipal().getUsername()}" th:remove="tag"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"><i class="fa fa-sign-out-alt"></i> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden type="submit" value="Sign Out"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+</body>
+</html>

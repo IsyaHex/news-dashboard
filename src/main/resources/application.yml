@@ -1,0 +1,25 @@
+server:
+  port: 5665
+
+spring:
+  application:
+    name: news-dashboard
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/news
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 2000000
+      connection-timeout: 30000
+      pool-name: HikariPool
+  liquibase:
+    change-log: classpath:liquibase/liquibase-changelog.xml
+    enabled: true
