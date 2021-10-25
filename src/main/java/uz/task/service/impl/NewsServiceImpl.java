@@ -3,22 +3,18 @@ package uz.task.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.task.constants.NewsStateEnum;
 import uz.task.domain.News;
 import uz.task.domain.User;
 import uz.task.dto.NewsSaveDto;
 import uz.task.repository.NewsRepository;
-import uz.task.repository.UserRepository;
 import uz.task.service.NewsService;
 import uz.task.service.UserService;
 
-import java.security.Principal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,7 +56,7 @@ public class NewsServiceImpl implements NewsService {
         if(optional.isPresent()) {
             news = optional.get();
             news.setState(NewsStateEnum.VERIFIED.getValue());
-            news.setAcceptDate(dateTimeFormatter(ZonedDateTime.now()));
+            news.setAcceptDate(dateTimeFormatter());
             return newsRepository.save(news);
         } else {
             throw new RuntimeException("News not found for id: " + id);
@@ -81,36 +77,33 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    @Override
+    public Page<News> findAllByPages(Integer pageNumber, Integer size) {
+        User user = userService.findByUsername();
+        Sort sort = Sort.by("id").ascending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, size, sort);
+        if (user.getId() == 1) {
+            return newsRepository.findAll(pageable);
+        } else {
+            return newsRepository.findAllByUserOrState(user, NewsStateEnum.VERIFIED.getValue(), pageable);
+        }
+    }
+
     private void createNews(NewsSaveDto model, News news) {
         User user = userService.findByUsername();
         news.setDescription(model.getDescription());
         news.setUser(user);
-        news.setCreateDate(dateTimeFormatter(ZonedDateTime.now()));
+        news.setCreateDate(dateTimeFormatter());
         news.setState(NewsStateEnum.UNVERIFIED.getValue());
         if(user.getId() == 1) {
-            news.setAcceptDate(dateTimeFormatter(ZonedDateTime.now()));
+            news.setAcceptDate(dateTimeFormatter());
             news.setState(NewsStateEnum.VERIFIED.getValue());
         }
     }
 
-    @Override
-    public List<News> findAll() {
-        User user = userService.findByUsername();
-        if (user.getId() == 1) {
-            return newsRepository.findAll();
-        } else {
-            return newsRepository.findAllByUserOrState(user, NewsStateEnum.VERIFIED.getValue());
-        }
-    }
-
-    @Override
-    public Page<News> findAllByPages() {
-        return newsRepository.findAll(PageRequest.of(0, 10));
-    }
-
     // Change the displayed date-time format
-    private String dateTimeFormatter(ZonedDateTime time) {
-        time = ZonedDateTime.now();
+    private String dateTimeFormatter() {
+        ZonedDateTime time = ZonedDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         return time.format(format);
     }

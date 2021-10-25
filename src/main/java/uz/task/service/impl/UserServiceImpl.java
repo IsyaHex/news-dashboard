@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.security.Principal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,10 +35,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public boolean checkIfUserExist(String username) {
-        return userRepository.findByUsername(username) != null;
-    }
+//    @Override
+//    public boolean checkIfUserExist(String username) {
+//        return userRepository.findByUsername(username) != null;
+//    }
 
     @Override
     public User findByUsername() {

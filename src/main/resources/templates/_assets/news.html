@@ -5,6 +5,7 @@
 <head>
     <title>News</title>
     <div th:replace="_fragments/header :: header-css"></div>
+
 </head>
 <body>
 
@@ -70,7 +71,7 @@
                     <th>Id</th>
                     <th>Описание новости</th>
 <!--                    <th sec:authorize="hasRole('ROLE_ADMIN')">Логин автора</th>-->
-                    <th>Логин автора</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Логин автора</th>
                     <th sec:authorize="hasRole('ROLE_ADMIN')">Почта автора</th>
                     <th sec:authorize="hasRole('ROLE_ADMIN')">Дата создания</th>
                     <th sec:authorize="hasRole('ROLE_ADMIN')">Дата одобрения</th>
@@ -83,11 +84,12 @@
                     <td th:text="${article.id}"></td>
                     <td th:text="${article.description}"></td>
 <!--                    <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.user.username}"></td>-->
-                    <td th:text="${article.user.username}"></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.user.username}"></td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.user.email}"></td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.createDate}"></td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${article.acceptDate}"></td>
-                    <td><a th:href="@{/news/edit/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-primary">Edit</a>
+                    <td><a th:if="${checkUser.id == article.user.id || checkUser.id == 1}"
+                           th:href="@{/news/edit/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-warning">Edit</a>
                         <a th:href="@{/news/details/{id}(id=${article.id})}" class="font-weight-bold btn btn-outline-info">Details</a>
                     </td>
 <!--                    <td><button id="editNewsButton" class="font-weight-bold btn btn-warning" type="button"><i class="fa fa-book-open"></i> Edit</button></td>-->
@@ -98,7 +100,36 @@
                 </tr>
                 </tbody>
             </table>
-            </div>
+                <div th:if="${totalPages > 1}">
+                    <div class="row col-sm-10">
+                        <div class="col-sm-2">
+                            Total Rows: [[${totalItems}]]
+                        </div>
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage > 1}" th:href="@{'/news/' + ${1}}" class="font-weight-bold btn btn-outline-primary">First</a>
+                            <span th:unless="${currentPage > 1}">First</span>
+                        </div>
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage > 1}" th:href="@{'/news/' + ${currentPage - 1}}" class="font-weight-bold btn btn-outline-primary">Previous</a>
+                            <span th:unless="${currentPage > 1}">Previous</span>
+                        </div>
+                        <div class="col-sm-2">
+                        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                              <a th:if="${currentPage != i}" th:href="@{'/news/' + ${i}}" class="font-weight-bold btn btn-outline-primary">[[${i}]]</a>
+                              <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        </span>
+                        </div>
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage < totalPages}" th:href="@{'/news/' + ${currentPage + 1}}" class="font-weight-bold btn btn-outline-primary">Next</a>
+                            <span th:unless="${currentPage < totalPages}">Next</span>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage < totalPages}" th:href="@{'/news/' + ${totalPages}}" class="font-weight-bold btn btn-outline-primary">Last</a>
+                            <span th:unless="${currentPage < totalPages}">Last</span>
+                        </div>
+                    </div>
+                </div>
     </div>
 </div>
 </div>
@@ -123,6 +154,7 @@
 
     });
     </script>
+</div>
 </div>
 </body>
 </html>

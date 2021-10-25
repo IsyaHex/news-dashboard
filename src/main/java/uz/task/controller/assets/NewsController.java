@@ -1,5 +1,6 @@
 package uz.task.controller.assets;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,8 @@ import uz.task.domain.User;
 import uz.task.dto.NewsSaveDto;
 import uz.task.service.NewsService;
 import uz.task.service.UserService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/news")
@@ -25,9 +28,22 @@ public class NewsController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String main(Model model) {
+        return findByPage(1, model);
+    }
+
+    @GetMapping("/{pageNumber}")
+    public String findByPage(@PathVariable(value = "pageNumber") Integer pageNumber, Model model) {
+        Integer pageSize = 15;
+        Page<News> page = newsService.findAllByPages(pageNumber, pageSize);
+        List<News> list = page.getContent();
+        User user = userService.findByUsername();
+        model.addAttribute("checkUser", user);
         model.addAttribute("news", new NewsSaveDto());
-        model.addAttribute("articles", newsService.findAll());
         model.addAttribute("article", new News());
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("articles", list);
         return "_assets/news";
     }
 
@@ -72,14 +88,14 @@ public class NewsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String approveArticle(@PathVariable("id") Long id) {
         newsService.approveState(id);
-        return "redirect:" + url;
+        return "redirect:" + url + "/1";
     }
 
     @GetMapping("/reject/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String rejectArticle(@PathVariable("id") Long id) {
         newsService.rejectState(id);
-        return "redirect:" + url;
+        return "redirect:" + url + "/1";
     }
 
 }
